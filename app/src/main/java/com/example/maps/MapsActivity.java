@@ -60,10 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng newPosition = new LatLng(lat, lang);
 
 
-            mMap.addMarker(new MarkerOptions().position(newPosition).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_24dp)));
+            mMap.addMarker(new MarkerOptions().position(newPosition));//.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_24dp))
             mMap.addPolyline(polylineOptions.add(newPosition));
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(newPosition));
+
             TextView distantionTv = findViewById(R.id.mf_distantion_tv);
 
 
@@ -77,11 +77,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 polylineOptions = new PolylineOptions();
                 distantionTv.setText(String.valueOf(0));
             } else {
-                float[] resultNew = new float[1];
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(newPosition));
 
-                Location.distanceBetween(oldPosition.latitude, oldPosition.longitude, newPosition.latitude, newPosition.longitude, resultNew);
+                float[] result = new float[1];
+
+                Location.distanceBetween(oldPosition.latitude, oldPosition.longitude, newPosition.latitude, newPosition.longitude, result);
                 oldPosition = newPosition;
-                distantion += convertToKm(resultNew[0]);
+                distantion += convertToKm(result[0]);
 
                 distantionTv.setText(String.valueOf(distantion));
             }

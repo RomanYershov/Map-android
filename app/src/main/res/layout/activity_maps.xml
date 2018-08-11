@@ -12,7 +12,7 @@
         android:id="@+id/mf_distantion_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="asdfadsf"
+        android:text="@string/null_value"
         android:padding="7dp"/>
 
 
