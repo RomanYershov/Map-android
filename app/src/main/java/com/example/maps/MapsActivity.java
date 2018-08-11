@@ -1,25 +1,16 @@
 package com.example.maps;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.support.annotation.DrawableRes;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -27,10 +18,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     int countMarkers = 0;
-    double distance = 0;
     PolylineOptions polylineOptions;
     LatLng oldPosition;
-    int resultOld = 0;
+    int distantion = 0;
 
 
     @Override
@@ -83,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (++countMarkers > 5) {
                 mMap.clear();
                 countMarkers = 0;
-                resultOld = 0;
+                distantion = 0;
                 polylineOptions = new PolylineOptions();
                 distantionTv.setText(String.valueOf(0));
             } else {
@@ -91,9 +81,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Location.distanceBetween(oldPosition.latitude, oldPosition.longitude, newPosition.latitude, newPosition.longitude, resultNew);
                 oldPosition = newPosition;
-                resultOld += convertToKm(resultNew[0]);
+                distantion += convertToKm(resultNew[0]);
 
-                distantionTv.setText(String.valueOf(resultOld));
+                distantionTv.setText(String.valueOf(distantion));
             }
 
 
@@ -104,15 +94,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return (int) v / 1000;
     }
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, R.drawable.marker);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
 }
